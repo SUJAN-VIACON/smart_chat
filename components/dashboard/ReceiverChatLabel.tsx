@@ -1,9 +1,11 @@
+import { type } from "os";
 import React from "react";
+
 
 const ReceiverChatLabel = () => {
   return (
     <div className=" w-full flex justify-end">
-      <style jsx>{`
+      <style jsx >{`
         .triangle {
           position: absolute;
           bottom: 0;
@@ -14,7 +16,7 @@ const ReceiverChatLabel = () => {
           border-right: 20px solid transparent;
           border-bottom: 20px solid #797979e5;
         }
-      `}</style>
+      `}</style> 
 
       <label className="sender-chat-label bg-base-300 p-2 relative rounded-l-lg rounded-tr-lg">
         <span className="triangle"></span>

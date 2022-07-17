@@ -1,8 +1,14 @@
 import React from 'react'
+import DashboardLayout from '../components/app/DashboardLayout'
+import ChatContainer from '../components/dashboard/ChatContainer'
 
 const DashBoard = () => {
   return (
-    <div>DashBoard</div>
+    <>
+      <DashboardLayout>
+        <ChatContainer />
+      </DashboardLayout>
+    </>
   )
 }
 
