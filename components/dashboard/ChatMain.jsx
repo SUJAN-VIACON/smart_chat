@@ -16,10 +16,10 @@ const ChatMain = () => {
           <p>applied as UX Designer</p>
         </div>
         <div className="">
-          <div class="btn-group">
-            <button class="btn btn-active">Chat</button>
-            <button class="btn">Email</button>
-            <button class="btn">Whatsapp</button>
+          <div className="btn-group">
+            <button className="btn btn-active">Chat</button>
+            <button className="btn">Email</button>
+            <button className="btn">Whatsapp</button>
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@ const ChatMain = () => {
         <input
           type="text"
           placeholder="Type here"
-          class=" rounded-full input input-bordered w-full"
+          className=" rounded-full input input-bordered w-full"
         />
 
         <label htmlFor="" className="bg-base-300 p-3 rounded-full">

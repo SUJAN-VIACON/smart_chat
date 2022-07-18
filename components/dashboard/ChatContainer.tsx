@@ -4,6 +4,7 @@ import { MdOutlineMailOutline, MdFolderOpen } from "react-icons/md";
 import { IoIosCall } from "react-icons/io";
 import ChatContacts from "./ChatContacts";
 import ChatMain from "./ChatMain";
+import Image from "next/image";
 
 const ChatContainer = () => {
   return (
@@ -12,12 +13,13 @@ const ChatContainer = () => {
         <Card>
           <div className=" w-full h-full bg-accent rounded-lg">
             <div className="flex flex-row h-full overflow-hidden rounded-lg">
-              <div className="basis-3/12 bg-base-200"><ChatContacts/></div>
-              <div className="basis-6/12 bg-base-200"><ChatMain/></div>
+              <div className="basis-3/12 bg-base-200"><ChatContacts /></div>
+              <div className="basis-6/12 bg-base-200"><ChatMain /></div>
               <div className="basis-3/12 py-5 px-10">
                 <div className=" flex flex-col items-center justify-center ">
-                  <img
-                    src="../images/edu3.svg"
+                  <Image
+                    src="/images/edu3.svg"
+                    width={70} height={70}
                     alt=""
                     className=" w-20 rounded-full"
                   />
