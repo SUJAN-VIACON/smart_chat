@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   images: {
     formats: ["image/avif", "image/webp"],
-    domains: ["localhost","static.xx.fbcdn.net"],
+    domains: ["localhost","static.xx.fbcdn.net","lh3.googleusercontent.com"],
   },
 }
 
