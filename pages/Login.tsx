@@ -29,7 +29,7 @@ const Login = () => {
       .then((result) => {
         if (result.user) {
           storeUser(result.user);
-          router.push("/Messenger");
+          router.push("/Dashboard");
         }
       })
       .catch((error) => {
