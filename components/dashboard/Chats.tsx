@@ -4,13 +4,20 @@ import { authentication } from '../../firebase';
 import ReceiverChatLabel from './ReceiverChatLabel'
 import { SenderChatLabel } from './SenderChatLabel'
 
-const Chats = ({ user, chat }: { user: any, chat: any }) => {
+export type Auth = {
+    email: string;
+    photo_url?: string | undefined;
+    uid?: string | undefined;
+    name?: string | undefined;
+};
+
+const Chats = ({ user, chat = null, key }: { user: any, chat: null | undefined, key: any }) => {
+    if (!chat) return;
     const [auth] = useAuthState(authentication);
+    if (!auth) return;
     return (
-        <div>
-            <div className="h-full flex flex-col gap-7 px-10">
-                {user == auth.email ? <SenderChatLabel chat={chat}/> : <ReceiverChatLabel chat={chat} />}
-            </div>
+        <div key={key}>
+            {user == auth.email ? <SenderChatLabel chat={chat} /> : <ReceiverChatLabel chat={chat} />}
         </div>
     )
 }

@@ -1,4 +1,3 @@
-import { Auth } from "firebase/auth";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -37,9 +36,9 @@ const ChatContacts = () => {
       <div className="mt-10">
         {users &&
           users.map((user: any) => (
-            <Link href={`/chat/${user.chatId}`}>
+            <Link href={`/chat/${user.chatId}`} key={user.uid}>
               <a href="">
-              <ContactLabel user={user} key={user.uid} />
+              <ContactLabel user={user} />
               </a>
             </Link>
           ))

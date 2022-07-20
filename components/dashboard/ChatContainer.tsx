@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "./Card";
 
-const ChatContainer = ({ contacts, chatMain, userDetails }: { contacts: any, chatMain: any, userDetails: any }) => {
+const ChatContainer = ({ contacts, chatMain=null, userDetails }: { contacts: any, chatMain: any, userDetails: any }) => {
   return (
     <>
       <div className="w-full h-full py-10">
