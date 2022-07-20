@@ -2,17 +2,10 @@ import { async } from '@firebase/util';
 import { log } from 'console';
 import { doc, getDoc, query, collection, where, getDocs, Query } from "firebase/firestore";
 import { db } from "../../firebase";
-import User, { UserType } from "./User";
+import User, { Auth, UserType } from "./User";
 
-type Auth = {
-    email: string;
-    photo_url: string;
-    uid: string;
-    name: string;
-}
 
 class Chat {
-
 
     // helper functions
 

@@ -21,6 +21,7 @@ export type Auth = {
   photo_url?: string | undefined;
   uid?: string | undefined;
   name?: string | undefined;
+  chatId?: string | undefined;
 };
 
 const ContactLabel = ({ user, add = false }: { user: Auth; add?: boolean }) => {
@@ -69,7 +70,7 @@ const ContactLabel = ({ user, add = false }: { user: Auth; add?: boolean }) => {
          <div className="bg-accent-content px-7 py-4 mt-3 mr-3">
           <div className=" flex items-center ">
             <Image
-              src={user.photo_url}
+              src={user.photo_url??''}
               alt=""
               width={50} height={50}
               className=" w-10 rounded-full"

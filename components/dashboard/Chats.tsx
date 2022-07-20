@@ -12,12 +12,12 @@ export type Auth = {
 };
 
 const Chats = ({ user, chat = null, key }: { user: any, chat: null | undefined, key: any }) => {
-    if (!chat) return;
-    const [auth] = useAuthState(authentication);
-    if (!auth) return;
+   
+    const [auth,loading] = useAuthState(authentication);
+   
     return (
         <div key={key}>
-            {user == auth.email ? <SenderChatLabel chat={chat} /> : <ReceiverChatLabel chat={chat} />}
+            {user == auth?.email ? <SenderChatLabel chat={chat} /> : <ReceiverChatLabel chat={chat} />}
         </div>
     )
 }

@@ -2,6 +2,14 @@
 import { collection, query, where, getDocs, doc, getDoc, limit, Query } from "firebase/firestore";
 import { db } from "../../firebase";
 
+export type Auth = {
+    email: string;
+    photo_url?: string;
+    uid?: string;
+    name?: string;
+    chatId?: string;
+};
+
 export type UserType = {
     email?: string | undefined;
     photo_url?: string | undefined;
