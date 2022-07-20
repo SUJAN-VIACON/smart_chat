@@ -21,7 +21,7 @@ const Login = () => {
   const [user] = useAuthState(authentication);
 
   if (user) {
-    router.push("/DashBoard");
+    router.push("/dashboard");
   }
 
   const loginWithGoogle = () => {
@@ -29,7 +29,7 @@ const Login = () => {
       .then((result) => {
         if (result.user) {
           storeUser(result.user);
-          router.push("/DashBoard");
+          router.push("/dashboard");
         }
       })
       .catch((error) => {

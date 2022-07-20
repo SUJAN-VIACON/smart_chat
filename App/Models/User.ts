@@ -3,6 +3,7 @@ import { collection, query, where, getDocs, doc, getDoc, limit, Query } from "fi
 import { db } from "../../firebase";
 
 export type Auth = {
+    id: string;
     email: string;
     photo_url?: string;
     uid?: string;
