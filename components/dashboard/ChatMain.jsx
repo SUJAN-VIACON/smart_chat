@@ -21,7 +21,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
   const [auth] = useAuthState(authentication);
   const [message, setMessage] = useState(null);
   const endOfMessageRef = useRef(null);
-  const chatId = chat ? chat.id : null;
+  const chatId = chat.id;
   const chatRef = doc(db, "chats", chatId);
   const messageRef = query(
     collection(chatRef, "message"),
@@ -58,7 +58,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
         <Chats user={message.user} chat={message.chat} key={message.id} />
       ));
     } else {
-      return JSON.parse(messages).map((message) => (
+      return messages.map((message) => (
         <Chats user={message.user} chat={message.chat} key={message.id} />
       ));
     }

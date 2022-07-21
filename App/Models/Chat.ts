@@ -5,6 +5,11 @@ import { db } from "../../firebase";
 import User, { Auth, UserType } from "./User";
 
 
+export type chatTypes = {
+    id: string;
+    user: Array<string>;
+};
+
 class Chat {
 
     // helper functions
