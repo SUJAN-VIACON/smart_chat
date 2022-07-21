@@ -21,7 +21,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
   const [auth] = useAuthState(authentication);
   const [message, setMessage] = useState(null);
   const endOfMessageRef = useRef(null);
-  const chatId = chat.id;
+  const chatId = chat ? chat.id : null;
   const chatRef = doc(db, "chats", chatId);
   const messageRef = query(
     collection(chatRef, "message"),
@@ -82,7 +82,6 @@ const ChatMain = ({ chat = null, messages = null }) => {
           <div className="btn-group">
             <button className="btn btn-active">Chat</button>
             <button className="btn">Email</button>
-            <button className="btn">Whatsapp</button>
           </div>
         </div>
       </div>

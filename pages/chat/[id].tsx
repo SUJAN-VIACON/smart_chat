@@ -18,7 +18,7 @@ import UserDetails from "../../components/dashboard/UserDetails";
 
 const Chat = ({ chatId }: { chatId: any }) => {
   const [chat, setChat] = useState();
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState();
 
   useEffect(() => {
     getChatMessages(chatId).then((chatMessage) => {
@@ -26,6 +26,10 @@ const Chat = ({ chatId }: { chatId: any }) => {
       setMessages(chatMessage.messages);
     });
   });
+
+  if (!chat || !messages) {
+    return null;
+  }
 
   async function getChatMessages(chatId: string) {
     const messages: any = [];
