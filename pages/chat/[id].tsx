@@ -27,6 +27,8 @@ const Chat = ({ chatId }: { chatId: any }) => {
     });
   });
 
+  
+
   if (!chat || !messages) {
     return null;
   }
