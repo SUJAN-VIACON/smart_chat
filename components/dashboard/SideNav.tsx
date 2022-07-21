@@ -1,18 +1,19 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import BlurCircle from "./BlurCircle";
 
 export const SideNav = () => {
   const [open, setOpen] = useState(true);
   const menus = [
-    { title: "Dashboard", src: "Chart_fill" },
-    { title: "Inbox", src: "Chat" },
-    { title: "Account", src: "User", gap: true },
-    { title: "Schedule", src: "Calendar" },
-    { title: "Search", src: "Search" },
-    { title: "Analytics", src: "Chart" },
-    { title: "Files", src: "Folder", gap: true },
-    { title: "Setting", src: "Setting" },
+    { title: "Dashboard", src: "Chart_fill", link: "/" },
+    { title: "Inbox", src: "Chat", link: "/" },
+    { title: "Account", src: "User", gap: true, link: "/" },
+    { title: "Schedule", src: "Calendar", link: "/" },
+    { title: "Search", src: "Search", link: "/" },
+    { title: "Analytics", src: "Chart", link: "/" },
+    { title: "Files", src: "Folder", gap: true, link: "/" },
+    { title: "Setting", src: "Setting", link: "/" },
   ];
   return (
     <>
@@ -53,20 +54,24 @@ export const SideNav = () => {
 
         <ul className="pt-6">
           {menus.map((menu, index) => (
-            <li
-              key={index}
-              className={`p-2 flex items-center gap-x-4 text-neutral cursor-pointer hover:bg-white hover:text-black rounded ${menu.gap ? "mt-9" : "mt-2"
-                }`}
-            >
-              <Image
-                height={30} width={30}
-                src={`/images/dashboard-icons/side-nav/${menu.src}.png`}
-                alt=""
-              />
-              <span className={`${!open && "hidden"} origin-left duration-200`}>
-                {menu.title}
-              </span>
-            </li>
+            <Link href={menu.link}>
+              <a>
+                <li
+                  key={index}
+                  className={`p-2 flex items-center gap-x-4 text-neutral cursor-pointer hover:bg-white hover:text-black rounded ${menu.gap ? "mt-9" : "mt-2"
+                    }`}
+                >
+                  <Image
+                    height={30} width={30}
+                    src={`/images/dashboard-icons/side-nav/${menu.src}.png`}
+                    alt=""
+                  />
+                  <span className={`${!open && "hidden"} origin-left duration-200`}>
+                    {menu.title}
+                  </span>
+                </li>
+              </a>
+            </Link>
           ))}
         </ul>
       </div>

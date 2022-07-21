@@ -2,8 +2,6 @@ import { BsFillFileEarmarkPostFill } from "react-icons/bs";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { FaMicrophone } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
-import { SenderChatLabel } from "./SenderChatLabel";
-import ReceiverChatLabel from "./ReceiverChatLabel";
 import React, { useState, useRef, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -11,14 +9,12 @@ import { authentication, db } from "../../firebase";
 import Chats from "./Chats";
 import { MdSend } from "react-icons/md";
 import {
-  setDoc,
   doc,
   collection,
   addDoc,
   serverTimestamp,
   orderBy,
   query,
-  getDocs,
 } from "firebase/firestore";
 
 const ChatMain = ({ chat = null, messages = null }) => {
@@ -32,7 +28,9 @@ const ChatMain = ({ chat = null, messages = null }) => {
     orderBy("created_at", "asc")
   );
   const [messageSnapShort] = useCollection(messageRef);
+
   const sendMessage = async (event) => {
+    event.preventDefault();
     if (!message || message == "") return;
     const docRef = doc(db, "chats", chat.id);
     const colRef = collection(docRef, "message");
@@ -57,7 +55,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
         chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
       });
       return chatMessages.map((message) => (
-        <Chats user={message.user} chat={message.chat} key={message.id}/>
+        <Chats user={message.user} chat={message.chat} key={message.id} />
       ));
     } else {
       return JSON.parse(messages).map((message) => (
@@ -96,20 +94,22 @@ const ChatMain = ({ chat = null, messages = null }) => {
 
       <div className=" flex justify-between items-center w-full px-5 gap-2 pb-5 ">
         <div className="relative w-full flex">
-          <input
-            type="text"
-            placeholder="Type here"
-            className=" rounded-full input input-bordered w-full"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
+          <form onSubmit={sendMessage} className=" w-full">
+            <input
+              type="text"
+              placeholder="Type here"
+              className=" rounded-full input input-bordered w-full"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
 
-          <button
-            className="text-natural font-bold absolute right-0 top-0 bottom-0 px-5"
-            onClick={(e) => sendMessage()}
-          >
-            <MdSend size={25} />
-          </button>
+            <button
+              className="text-natural font-bold absolute right-0 top-0 bottom-0 px-5"
+              type="submit"
+            >
+              <MdSend size={25} />
+            </button>
+          </form>
         </div>
 
         <label htmlFor="" className="bg-base-300 p-3 rounded-full">

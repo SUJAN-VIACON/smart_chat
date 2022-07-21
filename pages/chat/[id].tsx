@@ -9,30 +9,48 @@ import { db } from "../../firebase";
 import ChatContacts from "../../components/dashboard/ChatContacts";
 import ChatMain from "../../components/dashboard/ChatMain";
 import UserDetails from "../../components/dashboard/UserDetails";
+import { async } from "@firebase/util";
+import useSWR, { unstable_serialize } from 'swr'
 
 
 const Chat = ({ chat, messages }: { chat: any, messages: any }) => {
 
   return (
     <div>
-      <DashboardLayout>
+      {/* <DashboardLayout>
         <ChatContainer
           contacts={<ChatContacts />}
-          chatMain={<ChatMain chat={chat} messages={messages}/>}
+          chatMain={<ChatMain chat={chat} messages={messages} />}
           userDetails={<UserDetails />}
         />
-      </DashboardLayout>
+      </DashboardLayout> */}
     </div>
   );
 };
 
 export default Chat
 
-export async function getServerSideProps(context: any) {
+export async function getStaticProps(context: any) {
+  const chatMessage =await getChatMessages(context.query.id);
+  return {
+    props: {
+      fallback: {
+        '/api/chatMessage': chatMessage
+      }
+    }
+  }
+}
+
+function ChatMessage() {
+  // `data` will always be available as it's in `fallback`.
+  const { data } = useSWR('/api/chatMessage', fetcher)
+  return <h1>{data.title}</h1>
+}
+
+export async function getChatMessages(chatId: string) {
   const messages: any = [];
   const chat = [];
-
-  const chatRef = doc(db, "chats", context.query.id)
+  const chatRef = doc(db, "chats",)
 
   const messageRef = query(collection(chatRef, "message"), orderBy('created_at', 'asc'));
   const messageSnapShort = await getDocs(messageRef);
@@ -44,10 +62,5 @@ export async function getServerSideProps(context: any) {
   const chatSnapShort = await getDoc(chatRef);
   chat.push({ ...chatSnapShort.data(), id: chatSnapShort.id });
 
-  return {
-    props: {
-      chat: chat[0] || null,
-      messages: JSON.stringify(messages),
-    }, // will be passed to the page component as props
-  }
+  return { chat: chat[0], messages: messages }
 }
