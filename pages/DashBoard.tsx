@@ -5,7 +5,7 @@ import ChatContacts from "../components/dashboard/ChatContacts";
 import ChatMainInterFace from '../components/dashboard/ChatMainInterFace';
 import UserDetails from "../components/dashboard/UserDetails";
 
-const dashboard = () => {
+const Dashboard = () => {
   return (
     <>
       <DashboardLayout>
@@ -18,4 +18,4 @@ const dashboard = () => {
   )
 }
 
-export default dashboard
+export default Dashboard
