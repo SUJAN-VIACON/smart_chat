@@ -14,24 +14,20 @@ import { db } from "../../firebase";
 import ChatContacts from "../../components/dashboard/ChatContacts";
 import ChatMain from "../../components/dashboard/ChatMain";
 import UserDetails from "../../components/dashboard/UserDetails";
+import useSWR from 'swr'
+
 
 
 const Chat = ({ chatId }: { chatId: any }) => {
-  const [chat, setChat] = useState();
-  const [messages, setMessages] = useState();
 
-  useEffect(() => {
-    getChatMessages(chatId).then((chatMessage) => {
-      setChat(chatMessage.chat);
-      setMessages(chatMessage.messages);
-    });
-  });
+  const fetcher = async () => {
+   return getChatMessages(chatId).then((chatMessage) => chatMessage);
+  };
 
-  
+  const { data, error } = useSWR('/api/user/123', fetcher)
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
 
-  if (!chat || !messages) {
-    return null;
-  }
 
   async function getChatMessages(chatId: string) {
     const messages: any = [];
@@ -62,7 +58,7 @@ const Chat = ({ chatId }: { chatId: any }) => {
       <DashboardLayout>
         <ChatContainer
           contacts={<ChatContacts />}
-          chatMain={<ChatMain chat={chat} messages={messages} />}
+          chatMain={<ChatMain chat={data?.chat} messages={data?.messages} />}
           userDetails={<UserDetails />}
         />
       </DashboardLayout>
