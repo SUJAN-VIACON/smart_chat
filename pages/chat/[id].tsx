@@ -24,7 +24,7 @@ const Chat = ({ chatId }: { chatId: any }) => {
    return getChatMessages(chatId).then((chatMessage) => chatMessage);
   };
 
-  const { data, error } = useSWR('/api/user/123', fetcher)
+  const { data, error } = useSWR(`/api/user/${chatId}`, fetcher)
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
 
