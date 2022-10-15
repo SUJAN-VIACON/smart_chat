@@ -19,35 +19,62 @@ import {
 import { useQuery, useMutation, QueryClient } from "react-query";
 import ChatThread from "../../App/Models/ChatThread";
 
-const ChatMain = ({ userChat = nul }) => {
+const ChatMain = ({ userChat = null, chatRefetch, isChatRetching = false }) => {
+
   const [auth] = useAuthState(authentication);
-
-  const [messages, setMessages] = useState(userChat.messages);
-
-  const [chat, setChat] = useState(userChat.chat);
-
+  const [messages, setMessages] = useState(userChat?.messages);
+  const [chat, setChat] = useState(userChat?.chat);
   const [message, setMessage] = useState(null);
 
-  const queryClient = new QueryClient();
+  const chatRef = chat?.id ? doc(db, "chats", chat.id) : null;
+  const messageRef = chatRef ? query(
+    collection(chatRef, "message"),
+    orderBy("created_at", "asc")
+  ) : null;
+
+  const [messageSnapShort] = messageRef ? useCollection(messageRef) : [null];
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat, messages]);
 
   const endOfMessageRef = useRef(null);
 
-  const chatId = `chat${chat.id}`;
+  const recipientEmail = useQuery(
+    ['recipientEmail'],
+    async () => {
+      if (!chat) return null;
+      const email = chat.user.filter((user) => user != auth.email)[0];
+      return email;
+    }
+  )
 
-  const saveInMessageThread = useMutation((value) => saveChatMessage(), {
-    onSuccess: () => reRenderMessages(),
-  });
+
+  const showMessage = () => {
+    if (!chat && !messages) return null;
+
+    if (messageSnapShort) {
+      const chatMessages = [];
+      messageSnapShort.forEach((doc) => {
+        chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
+      });
+      return chatMessages.map((message) => (
+        <Chats user={message.user} chat={message.chat} key={message.id} />
+      ));
+    } else {
+      return messages.map((message) => (
+        <Chats user={message.user} chat={message.chat} key={message.id} />
+      ));
+    }
+  };
 
   const sendMessage = async (event) => {
     event.preventDefault();
     if (!message || message == "") return;
-
-    saveInMessageThread.mutate(message, {
-      onSuccess: () => {
-        setMessage("");
-        scrollToBottom();
-      },
-    });
+    saveChatMessage()
+    setMessage("");
+    scrollToBottom();
+    chatRefetch()
   };
 
   const saveChatMessage = () => {
@@ -61,17 +88,6 @@ const ChatMain = ({ userChat = nul }) => {
     });
   };
 
-  const reRenderMessages = async () => {
-    const data = await ChatThread.getChatMessages(chatId);
-    console.log(data)
-    setChat(data.chat);
-    setMessage(data.messages);
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [chat,messages]);
-
   const scrollToBottom = () => {
     endOfMessageRef.current.scrollIntoView({
       behavior: "smooth",
@@ -83,7 +99,7 @@ const ChatMain = ({ userChat = nul }) => {
     <section className="h-full relative flex flex-col justify-between gap-3">
       <div className="p-7 flex justify-between bg-accent-focus">
         <div className="">
-          <p className=" text-lg font-bold text-neutral">Akash Sharma</p>
+          <p className=" text-lg font-bold text-neutral">{recipientEmail?.data}</p>
           <p>applied as UX Designer</p>
         </div>
         <div className="">
@@ -95,10 +111,7 @@ const ChatMain = ({ userChat = nul }) => {
       </div>
 
       <div className="h-full flex flex-col gap-1 overflow-y-auto px-10 mb-5 scrollbar-hide">
-        {messages &&
-          messages.map((message) => (
-            <Chats user={message.user} chat={message.chat} key={message.id} />
-          ))}
+        {showMessage()}
         <div ref={endOfMessageRef}></div>
       </div>
 

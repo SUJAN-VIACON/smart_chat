@@ -16,7 +16,8 @@ class ChatThread {
 
     static find = async (id: string) => {
         const chatRef = doc(db, 'chats', id);
-        return await getDoc(chatRef);
+        const chatSnapShort = await getDoc(chatRef);
+        return chatSnapShort.data()
     }
 
     static recipients = async (auth: Auth) => {

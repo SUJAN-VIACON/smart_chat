@@ -15,11 +15,13 @@ const ContactLabel = ({
   setUser = null,
   setSearch = null,
   add = false,
+  setShowAllUser=null
 }: {
   user: Auth;
   setUser?: any;
   setSearch?: any;
   add?: boolean;
+  setShowAllUser:any
 }) => {
   const auth = useAppSelector((state) => state.auth.auth) as Auth;
   const router = useRouter();
@@ -30,9 +32,11 @@ const ContactLabel = ({
   const [chatSnapShort] = useCollection(chatQuery);
 
   const createChat = async (userEmail: string) => {
+    alert("sujan");
     const existChatId = chatAlreadyExists().id;
 
     if (existChatId) {
+      setShowAllUser(false);
       router.push("/chat/" + existChatId);
     }
 
@@ -80,7 +84,7 @@ const ContactLabel = ({
 
   return (
     <>
-      <div className="bg-accent-content px-7 py-4">
+      <div className="bg-accent-content px-7 py-4 shadow-md rounded-lg mb-3">
         <div className=" flex justify-between">
           <div className=" flex">
             <Image

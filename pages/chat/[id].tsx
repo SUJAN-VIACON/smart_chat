@@ -10,7 +10,6 @@ import {
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/app/DashboardLayout";
 import ChatContainer from "../../components/dashboard/ChatContainer";
-import { db } from "../../firebase";
 import ChatContacts from "../../components/dashboard/ChatContacts";
 import ChatMain from "../../components/dashboard/ChatMain";
 import UserDetails from "../../components/dashboard/UserDetails";
@@ -19,19 +18,17 @@ import { useMutation, useQuery } from "react-query";
 import ChatThread from "../../App/Models/ChatThread";
 
 const Chat = ({ chatId }: { chatId: any }) => {
+
   const userChat = useQuery(
-    `chat${chatId}`,
+    [`chat${chatId}`],
     async () => {
-      const chat = await ChatThread.getChatMessages(chatId);
-      return chat;
+      const chatMessages = await ChatThread.getChatMessages(chatId);
+      return chatMessages;
     },
   );
 
-  if (userChat.isFetching) {
-    return <div>Loading...</div>;
-  }
   if (userChat.isError) {
-    return <div>Error! {userChat.error.message}</div>;
+    return <div>Error! {userChat?.error?.message}</div>;
   }
 
   return (
@@ -40,7 +37,7 @@ const Chat = ({ chatId }: { chatId: any }) => {
         <ChatContainer
           contacts={<ChatContacts />}
           chatMain={
-            <ChatMain userChat={chatId} />
+            <ChatMain key={chatId} userChat={userChat?.data} isChatFetching={userChat.isFetched} chatRefetch={userChat.refetch} />
           }
           userDetails={<UserDetails />}
         />
