@@ -14,43 +14,24 @@ import { db } from "../../firebase";
 import ChatContacts from "../../components/dashboard/ChatContacts";
 import ChatMain from "../../components/dashboard/ChatMain";
 import UserDetails from "../../components/dashboard/UserDetails";
-import useSWR from 'swr'
-
-
+import useSWR from "swr";
+import { useMutation, useQuery } from "react-query";
+import ChatThread from "../../App/Models/ChatThread";
 
 const Chat = ({ chatId }: { chatId: any }) => {
+  const userChat = useQuery(
+    `chat${chatId}`,
+    async () => {
+      const chat = await ChatThread.getChatMessages(chatId);
+      return chat;
+    },
+  );
 
-  const fetcher = async () => {
-   return getChatMessages(chatId).then((chatMessage) => chatMessage);
-  };
-
-  const { data, error } = useSWR(`/api/user/${chatId}`, fetcher)
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
-
-
-  async function getChatMessages(chatId: string) {
-    const messages: any = [];
-    const chat: any = [];
-    const chatRef = doc(db, "chats", chatId);
-
-    const messageRef = query(
-      collection(chatRef, "message"),
-      orderBy("created_at", "asc")
-    );
-    const messageSnapShort = await getDocs(messageRef);
-
-    messageSnapShort.forEach((doc: any) => {
-      messages.push({
-        ...doc.data(),
-        id: doc.id,
-      });
-    });
-
-    const chatSnapShort = await getDoc(chatRef);
-    chat.push({ ...chatSnapShort.data(), id: chatSnapShort.id });
-
-    return { chat: chat[0], messages: messages };
+  if (userChat.isFetching) {
+    return <div>Loading...</div>;
+  }
+  if (userChat.isError) {
+    return <div>Error! {userChat.error.message}</div>;
   }
 
   return (
@@ -58,7 +39,9 @@ const Chat = ({ chatId }: { chatId: any }) => {
       <DashboardLayout>
         <ChatContainer
           contacts={<ChatContacts />}
-          chatMain={<ChatMain chat={data?.chat} messages={data?.messages} />}
+          chatMain={
+            <ChatMain userChat={chatId} />
+          }
           userDetails={<UserDetails />}
         />
       </DashboardLayout>

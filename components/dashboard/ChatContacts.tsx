@@ -3,29 +3,28 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useAppSelector } from "../../App/hooks";
-import Chat from "../../App/Models/Chat";
+import ChatThread from "../../App/Models/ChatThread";
 import User, { Auth } from "../../App/Models/User";
 import ContactLabel from "./ContactLabel";
 import { db } from "../../firebase";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useQuery } from "react-query";
 
 const ChatContacts = () => {
   const auth = useAppSelector((state) => state.auth.auth) as Auth;
-  const [users, setUsers] = useState([]);
   const [search, setSearch] = useState<string>();
   const [result, setResult] = useState();
-  const [registeredUsers, setRegisteredUsers] = useState([]);
   const [showAllUser, setShowAllUser] = useState(false);
 
-  useEffect(() => {
-    Chat.recipients(auth).then((recipientUsers: Auth | any) => {
-      setUsers(recipientUsers);
-    });
+  const users = useQuery("users", async () => {
+    const users = await ChatThread.recipients(auth);
+    return users;
+  });
 
-    User.all().then((allUsers: Auth | any) => {
-      setRegisteredUsers(allUsers);
-    });
-  }, [search, result]);
+  const registeredUsers = useQuery("registeredUsers", async () => {
+    const users = await User.all();
+    return users;
+  });
 
   const searchUser = async (event: any) => {
     event.preventDefault();
@@ -40,6 +39,23 @@ const ChatContacts = () => {
       setResult(user[0]);
     });
   };
+
+  if (users.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (users.isError) {
+    return <h1>error</h1>;
+  }
+
+  if (registeredUsers.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (registeredUsers.isError) {
+    return <h1>error</h1>;
+  }
+
 
   return (
     <section>
@@ -80,9 +96,9 @@ const ChatContacts = () => {
           </div>
         )} */}
 
-        {showAllUser && registeredUsers && (
+        {showAllUser && registeredUsers.data && (
           <div className="absolute bg-white text-black p-1 z-20 mt-7">
-            {registeredUsers.map((user: any) => (
+            {registeredUsers.data.map((user: any) => (
               <div key={user.id}>
                 <ContactLabel
                   user={user}
@@ -97,8 +113,8 @@ const ChatContacts = () => {
       </div>
 
       <div className="mt-10">
-        {users &&
-          users.map((user: any) => (
+        {users.data &&
+          users.data.map((user: any) => (
             <div className="mt-3 mr-3" key={user.uid}>
               <Link href={`/chat/${user.chatId}`}>
                 <a href="">

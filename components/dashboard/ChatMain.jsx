@@ -16,53 +16,61 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
+import { useQuery, useMutation, QueryClient } from "react-query";
+import ChatThread from "../../App/Models/ChatThread";
 
-const ChatMain = ({ chat = null, messages = null }) => {
+const ChatMain = ({ userChat = nul }) => {
   const [auth] = useAuthState(authentication);
+
+  const [messages, setMessages] = useState(userChat.messages);
+
+  const [chat, setChat] = useState(userChat.chat);
+
   const [message, setMessage] = useState(null);
+
+  const queryClient = new QueryClient();
+
   const endOfMessageRef = useRef(null);
-  const chatId = chat ? chat.id : null;
-  const chatRef = doc(db, "chats", chatId);
-  const messageRef = query(
-    collection(chatRef, "message"),
-    orderBy("created_at", "asc")
-  );
-  const [messageSnapShort] = useCollection(messageRef);
+
+  const chatId = `chat${chat.id}`;
+
+  const saveInMessageThread = useMutation((value) => saveChatMessage(), {
+    onSuccess: () => reRenderMessages(),
+  });
 
   const sendMessage = async (event) => {
     event.preventDefault();
     if (!message || message == "") return;
+
+    saveInMessageThread.mutate(message, {
+      onSuccess: () => {
+        setMessage("");
+        scrollToBottom();
+      },
+    });
+  };
+
+  const saveChatMessage = () => {
     const docRef = doc(db, "chats", chat.id);
     const colRef = collection(docRef, "message");
+
     addDoc(colRef, {
       chat: message,
       user: auth.email,
       created_at: serverTimestamp(),
     });
-    setMessage("");
-    scrollToBottom();
+  };
+
+  const reRenderMessages = async () => {
+    const data = await ChatThread.getChatMessages(chatId);
+    console.log(data)
+    setChat(data.chat);
+    setMessage(data.messages);
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messageSnapShort, message]);
-
-  const showMessage = () => {
-    if (!chat && !messages) return null;
-    if (messageSnapShort) {
-      const chatMessages = [];
-      messageSnapShort.forEach((doc) => {
-        chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
-      });
-      return chatMessages.map((message) => (
-        <Chats user={message.user} chat={message.chat} key={message.id} />
-      ));
-    } else {
-      return messages.map((message) => (
-        <Chats user={message.user} chat={message.chat} key={message.id} />
-      ));
-    }
-  };
+  }, [chat,messages]);
 
   const scrollToBottom = () => {
     endOfMessageRef.current.scrollIntoView({
@@ -87,7 +95,10 @@ const ChatMain = ({ chat = null, messages = null }) => {
       </div>
 
       <div className="h-full flex flex-col gap-1 overflow-y-auto px-10 mb-5 scrollbar-hide">
-        {showMessage()}
+        {messages &&
+          messages.map((message) => (
+            <Chats user={message.user} chat={message.chat} key={message.id} />
+          ))}
         <div ref={endOfMessageRef}></div>
       </div>
 
