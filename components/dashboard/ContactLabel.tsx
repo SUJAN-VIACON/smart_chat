@@ -5,7 +5,7 @@ import { useAppSelector } from "../../App/hooks";
 import { query, collection, where, addDoc } from "firebase/firestore";
 import { authentication, db } from "../../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { Auth } from "../../App/Models/User";
+import { Auth } from "../../App/Services/UserService";
 import { IoMdAdd } from "react-icons/io";
 import { useRouter } from "next/router";
 
@@ -15,11 +15,13 @@ const ContactLabel = ({
   setUser = null,
   setSearch = null,
   add = false,
+  setShowAllUser = false
 }: {
   user: Auth;
   setUser?: any;
   setSearch?: any;
   add?: boolean;
+  setShowAllUser?: any
 }) => {
   const auth = useAppSelector((state) => state.auth.auth) as Auth;
   const router = useRouter();
@@ -33,6 +35,7 @@ const ContactLabel = ({
     const existChatId = chatAlreadyExists().id;
 
     if (existChatId) {
+      setShowAllUser(false);
       router.push("/chat/" + existChatId);
     }
 
@@ -45,7 +48,7 @@ const ContactLabel = ({
         const newChat = await addDoc(collection(db, "chats"), {
           user: [auth.email, userEmail],
         });
-
+        setShowAllUser(false);
         router.push("/chat/" + newChat.id);
       } catch (errors) {
         alert(errors);
@@ -80,7 +83,7 @@ const ContactLabel = ({
 
   return (
     <>
-      <div className="bg-accent-content px-7 py-4">
+      <div className="bg-accent-content px-7 py-4 mb-3">
         <div className=" flex justify-between">
           <div className=" flex">
             <Image

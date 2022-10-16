@@ -14,6 +14,7 @@ import { db } from "../../firebase";
 import ChatContacts from "../../components/dashboard/ChatContacts";
 import ChatMain from "../../components/dashboard/ChatMain";
 import UserDetails from "../../components/dashboard/UserDetails";
+import ChatService from "../../App/Services/ChatService";
 import useSWR from 'swr'
 
 
@@ -21,44 +22,19 @@ import useSWR from 'swr'
 const Chat = ({ chatId }: { chatId: any }) => {
 
   const fetcher = async () => {
-   return getChatMessages(chatId).then((chatMessage) => chatMessage);
+    return await ChatService.getChatMessages(chatId);
   };
 
   const { data, error } = useSWR(`/api/user/${chatId}`, fetcher)
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
 
-
-  async function getChatMessages(chatId: string) {
-    const messages: any = [];
-    const chat: any = [];
-    const chatRef = doc(db, "chats", chatId);
-
-    const messageRef = query(
-      collection(chatRef, "message"),
-      orderBy("created_at", "asc")
-    );
-    const messageSnapShort = await getDocs(messageRef);
-
-    messageSnapShort.forEach((doc: any) => {
-      messages.push({
-        ...doc.data(),
-        id: doc.id,
-      });
-    });
-
-    const chatSnapShort = await getDoc(chatRef);
-    chat.push({ ...chatSnapShort.data(), id: chatSnapShort.id });
-
-    return { chat: chat[0], messages: messages };
-  }
+  if (error) return <div>failed to load {error}</div>
 
   return (
     <div>
       <DashboardLayout>
         <ChatContainer
           contacts={<ChatContacts />}
-          chatMain={<ChatMain chat={data?.chat} messages={data?.messages} />}
+          chatMain={<ChatMain key={chatId} chat={data?.chat} messages={data?.messages} />}
           userDetails={<UserDetails />}
         />
       </DashboardLayout>

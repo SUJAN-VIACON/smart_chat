@@ -20,7 +20,7 @@ export type UserType = {
     chatId?: string | undefined;
 }
 
-class User {
+class UserService {
 
     // helper functions
 
@@ -57,4 +57,4 @@ class User {
 
 }
 
-export default User;
+export default UserService;

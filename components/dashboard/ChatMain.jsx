@@ -16,17 +16,28 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
+import Spinner from "./Spinner";
 
 const ChatMain = ({ chat = null, messages = null }) => {
+
+
+  // return (
+  //   <div className="h-full relative flex flex-col justify-between">
+  //     <Spinner loading={true} />
+  //   </div>
+  // )
+
+
   const [auth] = useAuthState(authentication);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState('');
   const endOfMessageRef = useRef(null);
   const chatId = chat ? chat.id : null;
-  const chatRef = doc(db, "chats", chatId);
-  const messageRef = query(
+  const chatRef = chatId ? doc(db, "chats", chatId) : null;
+  const messageRef = chatRef ? query(
     collection(chatRef, "message"),
     orderBy("created_at", "asc")
-  );
+  ) : null;
+
   const [messageSnapShort] = useCollection(messageRef);
 
   const sendMessage = async (event) => {
@@ -55,11 +66,11 @@ const ChatMain = ({ chat = null, messages = null }) => {
         chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
       });
       return chatMessages.map((message) => (
-        <Chats user={message.user} chat={message.chat} key={message.id} />
+        <Chats key={message.chat.id} user={message.user} chat={message.chat} />
       ));
     } else {
       return messages.map((message) => (
-        <Chats user={message.user} chat={message.chat} key={message.id} />
+        <Chats key={message.chat.id} user={message.user} chat={message.chat} />
       ));
     }
   };
@@ -70,6 +81,8 @@ const ChatMain = ({ chat = null, messages = null }) => {
       block: "end",
     });
   };
+
+
 
   return (
     <section className="h-full relative flex flex-col justify-between gap-3">
@@ -87,6 +100,12 @@ const ChatMain = ({ chat = null, messages = null }) => {
       </div>
 
       <div className="h-full flex flex-col gap-1 overflow-y-auto px-10 mb-5 scrollbar-hide">
+        {!chat &&
+          <div className="flex items-center h-full">
+            <Spinner loading={true} />
+          </div>
+        }
+
         {showMessage()}
         <div ref={endOfMessageRef}></div>
       </div>
