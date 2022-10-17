@@ -1,14 +1,15 @@
+import Link from "next/link";
 import React, { useState } from "react";
 import BlurCircle from "./BlurCircle";
 
 export const SideNav = () => {
   const [open, setOpen] = useState(true);
   const menus = [
-    { title: "Dashboard", src: "Chart_fill", link: "/" },
-    { title: "Friends", src: "Chat", link: "/" },
-    { title: "Add Friends", src: "User", gap: true, link: "/" },
-    { title: "Files", src: "Folder",link: "/" },
-    { title: "Setting", src: "Setting",gap: true, link: "/" },
+    { title: "Dashboard", src: "Chart_fill", link: "/chat" },
+    { title: "Friends", src: "Chat", link: "/friends" },
+    { title: "Add Friends", src: "User", gap: true, link: "/friend_requests" },
+    { title: "Files", src: "Folder",link: "/files" },
+    { title: "Setting", src: "Setting",gap: true, link: "/profile" },
   ];
   return (
     <>
@@ -45,6 +46,7 @@ export const SideNav = () => {
 
         <ul className="pt-6">
           {menus.map((menu, index) => (
+            <Link href={menu.link} key={index}>
             <li
               key={index}
               className={`p-2 flex items-center gap-x-4 text-neutral cursor-pointer hover:bg-white hover:text-black rounded ${
@@ -59,6 +61,7 @@ export const SideNav = () => {
                 {menu.title}
               </span>
             </li>
+            </Link>
           ))}
         </ul>
       </div>
