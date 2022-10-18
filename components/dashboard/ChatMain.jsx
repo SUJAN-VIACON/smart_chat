@@ -20,25 +20,15 @@ import Spinner from "./Spinner";
 import DragAndDrop from "../DrangAndDrop/DragAndDrop";
 
 const ChatMain = ({ chat = null, messages = null }) => {
-
   const [showDragAndDrop, setShowDragAndDrop] = useState(false);
-
-  // return (
-  //   <div className="h-full relative flex flex-col justify-between">
-  //     <Spinner loading={true} />
-  //   </div>
-  // )
-
-
   const [auth] = useAuthState(authentication);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const endOfMessageRef = useRef(null);
   const chatId = chat ? chat.id : null;
   const chatRef = chatId ? doc(db, "chats", chatId) : null;
-  const messageRef = chatRef ? query(
-    collection(chatRef, "message"),
-    orderBy("created_at", "asc")
-  ) : null;
+  const messageRef = chatRef
+    ? query(collection(chatRef, "message"), orderBy("created_at", "asc"))
+    : null;
 
   const [messageSnapShort] = useCollection(messageRef);
 
@@ -68,11 +58,11 @@ const ChatMain = ({ chat = null, messages = null }) => {
         chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
       });
       return chatMessages.map((message) => (
-        <Chats key={message.chat.id} user={message.user} chat={message.chat} />
+        <Chats key={message.chat.id} user={message.user} message={message} />
       ));
     } else {
       return messages.map((message) => (
-        <Chats key={message.chat.id} user={message.user} chat={message.chat} />
+        <Chats key={message.chat.id} user={message.user} message={message} />
       ));
     }
   };
@@ -83,8 +73,6 @@ const ChatMain = ({ chat = null, messages = null }) => {
       block: "end",
     });
   };
-
-
 
   return (
     <section className="h-full relative flex flex-col justify-between gap-3">
@@ -102,18 +90,19 @@ const ChatMain = ({ chat = null, messages = null }) => {
       </div>
 
       <div className="h-full flex flex-col gap-1 overflow-y-auto px-10 mb-5 scrollbar-hide">
-        {!chat &&
+        {!chat && (
           <div className="flex items-center h-full">
             <Spinner loading={true} />
           </div>
-        }
+        )}
 
-        {showDragAndDrop ?
-          (
-            <div className="flex items-center justify-center h-full w-full border-2 rounded-md border-bg-base-300">
-              <DragAndDrop />
-            </div>)
-          : showMessage()}
+        {showDragAndDrop ? (
+          <div className="flex items-center justify-center h-full w-full border-2 rounded-md border-bg-base-300">
+            <DragAndDrop chat={chat} setShowDragAndDrop={setShowDragAndDrop} />
+          </div>
+        ) : (
+          showMessage()
+        )}
         <div ref={endOfMessageRef}></div>
       </div>
 
@@ -137,7 +126,11 @@ const ChatMain = ({ chat = null, messages = null }) => {
           </form>
         </div>
 
-        <label htmlFor="" className="bg-base-300 p-3 rounded-full" onClick={() => setShowDragAndDrop((e) => !e)}>
+        <label
+          htmlFor=""
+          className="bg-base-300 p-3 rounded-full"
+          onClick={() => setShowDragAndDrop((e) => !e)}
+        >
           <BsFillFileEarmarkPostFill />
         </label>
       </div>

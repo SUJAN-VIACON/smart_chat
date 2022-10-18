@@ -27,7 +27,8 @@
     "spinners-react": "^1.0.7",
     "swiper": "^8.2.4",
     "swr": "^1.3.0",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "18.0.5",
