@@ -17,9 +17,11 @@ import {
   query,
 } from "firebase/firestore";
 import Spinner from "./Spinner";
+import DragAndDrop from "../DrangAndDrop/DragAndDrop";
 
 const ChatMain = ({ chat = null, messages = null }) => {
 
+  const [showDragAndDrop, setShowDragAndDrop] = useState(false);
 
   // return (
   //   <div className="h-full relative flex flex-col justify-between">
@@ -106,7 +108,12 @@ const ChatMain = ({ chat = null, messages = null }) => {
           </div>
         }
 
-        {showMessage()}
+        {showDragAndDrop ?
+          (
+            <div className="flex items-center justify-center h-full w-full border-2 rounded-md border-bg-base-300">
+              <DragAndDrop />
+            </div>)
+          : showMessage()}
         <div ref={endOfMessageRef}></div>
       </div>
 
@@ -130,17 +137,8 @@ const ChatMain = ({ chat = null, messages = null }) => {
           </form>
         </div>
 
-        <label htmlFor="" className="bg-base-300 p-3 rounded-full">
+        <label htmlFor="" className="bg-base-300 p-3 rounded-full" onClick={() => setShowDragAndDrop((e) => !e)}>
           <BsFillFileEarmarkPostFill />
-        </label>
-        <label htmlFor="" className="bg-base-300 p-3 rounded-full">
-          <RiContactsBook2Line />
-        </label>
-        <label htmlFor="" className="bg-base-300 p-3 rounded-full">
-          <FaMicrophone />
-        </label>
-        <label htmlFor="" className="bg-base-300 p-3 rounded-full">
-          <FiMoreHorizontal />
         </label>
       </div>
     </section>
