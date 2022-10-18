@@ -8,12 +8,10 @@ type jsxType = {
 export const SenderChatLabel = ({ message }: any) => {
   return (
     <div className=" flex justify-start">
-      <label className="sender-chat-label bg-base-300 p-2 absolute rounded-r-lg rounded-bl-lg relative">
-
+      <label className="sender-chat-label bg-base-300 p-2 rounded-r-lg rounded-bl-lg relative flex flex-col">
         {message.imageUrl && (
-          <Image src={message.imageUrl} width={100} height={100} />
+          <Image src={message.imageUrl} width={500} height={500} className="rounded" layout="responsive"/>
         )}
-
         <span className="  ">{message.chat}</span>
       </label>
     </div>

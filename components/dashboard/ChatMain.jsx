@@ -58,11 +58,11 @@ const ChatMain = ({ chat = null, messages = null }) => {
         chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
       });
       return chatMessages.map((message) => (
-        <Chats key={message.chat.id} user={message.user} message={message} />
+        <Chats key={message.chat.id} message={message} />
       ));
     } else {
       return messages.map((message) => (
-        <Chats key={message.chat.id} user={message.user} message={message} />
+        <Chats key={message.chat.id} message={message} />
       ));
     }
   };
