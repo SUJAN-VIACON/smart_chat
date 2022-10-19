@@ -6,9 +6,10 @@ export const SideNav = () => {
   const [open, setOpen] = useState(true);
   const menus = [
     { title: "Dashboard", src: "Chart_fill", link: "/chat" },
-    { title: "Friends", src: "Chat", link: "/friends" },
+    
     { title: "Add Friends", src: "User", gap: true, link: "/friend_requests" },
-    { title: "Files", src: "Folder",link: "/files" },
+    { title: "Friends", src: "Chat", link: "/friends" },
+
     { title: "Setting", src: "Setting",gap: true, link: "/profile" },
   ];
   return (

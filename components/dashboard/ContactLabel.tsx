@@ -23,63 +23,6 @@ const ContactLabel = ({
   add?: boolean;
   setShowAllUser?: any
 }) => {
-  const auth = useAppSelector((state) => state.auth.auth) as Auth;
-  const router = useRouter();
-  const chatQuery = query(
-    collection(db, "chats"),
-    where("user", "array-contains", auth.email)
-  );
-  const [chatSnapShort] = useCollection(chatQuery);
-
-  const createChat = async (userEmail: string) => {
-    const existChatId = chatAlreadyExists().id;
-
-    if (existChatId) {
-      setShowAllUser(false);
-      router.push("/chat/" + existChatId);
-    }
-
-    if (
-      EmailVaildator.validate(userEmail) &&
-      userEmail != auth.email &&
-      !existChatId
-    ) {
-      try {
-        const newChat = await addDoc(collection(db, "chats"), {
-          user: [auth.email, userEmail],
-        });
-        setShowAllUser(false);
-        router.push("/chat/" + newChat.id);
-      } catch (errors) {
-        alert(errors);
-        return;
-      }
-    }
-    setUser(null);
-    setSearch("");
-  };
-
-  const chatAlreadyExists = () => {
-    const chats: any = [];
-    if (chatSnapShort && chatSnapShort.docs.length > 0) {
-      chatSnapShort.forEach((doc) => {
-        chats.push({ ...doc.data(), id: doc.id });
-      });
-    }
-
-    var existChatId = null;
-    chats.forEach((chat: any) => {
-      if (chat.user[0] == auth.email && chat.user[1] == user.email) {
-        existChatId = chat.id;
-      }
-
-      if (chat.user[1] == auth.email && chat.user[0] == user.email) {
-        existChatId = chat.id;
-      }
-    });
-
-    return { id: existChatId };
-  };
 
   return (
     <>
@@ -107,7 +50,6 @@ const ContactLabel = ({
           {add && (
             <button
               className=" text-neutral font-bold"
-              onClick={(e) => createChat(user.email)}
             >
               <IoMdAdd size={30} />
             </button>
