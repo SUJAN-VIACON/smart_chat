@@ -38,6 +38,11 @@ const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDr
 
   const uploadFile = (file: any) => {
     if (!file) return;
+    if (!file.type || file.type == '' || file.type.split("/")[0] != 'image') {
+      alert("only Image supported")
+      setShowDragAndDrop(false)
+      return
+    };
     const imageRef = ref(storage, `iamges/${file.name}+${v4()}`);
     uploadBytes(imageRef, file)
       .then((data) => {
@@ -50,6 +55,8 @@ const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDr
         setShowDragAndDrop(false);
       });
   };
+
+  console.log(files)
 
   const sendMessage = async (imageUrl: any) => {
     const docRef = doc(db, "chats", chat.id);
@@ -85,7 +92,7 @@ const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDr
                 <Image
                   src={file.preview}
                   width={300}
-                  height={300}
+                  height={200}
                   className="rounded-md"
                 />
 
