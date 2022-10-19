@@ -6,26 +6,23 @@ import { useAppSelector } from "../../App/hooks";
 import ChatService from "../../App/Services/ChatService";
 import UserService, { Auth } from "../../App/Services/UserService";
 import ContactLabel from "./ContactLabel";
-import { db } from "../../firebase";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { authentication, db } from "../../firebase";
+import { AiOutlineClose, AiOutlineCloseCircle } from "react-icons/ai";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const ChatContacts = () => {
-  const auth = useAppSelector((state) => state.auth.auth) as Auth;
+  const [auth] = useAuthState(authentication) as any;
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState<string>();
   const [result, setResult] = useState();
-  const [registeredUsers, setRegisteredUsers] = useState([]);
+  const [searchableUsers, setSearchableUsers] = useState([]);
   const [showAllUser, setShowAllUser] = useState(false);
 
   useEffect(() => {
     ChatService.recipients(auth).then((recipientUsers: Auth | any) => {
       setUsers(recipientUsers);
+      setSearchableUsers(recipientUsers)
     });
-
-    UserService.all().then((allUsers: Auth | any) => {
-      setRegisteredUsers(allUsers);
-    });
-
   }, [search, result]);
 
   const searchUser = async (event: any) => {
@@ -48,10 +45,10 @@ const ChatContacts = () => {
       <div className="relative">
         {showAllUser && (
           <div
-            className=" cursor-pointer text-2xl font-bold text-white absolute top-[1rem] right-5 z-10"
+            className=" cursor-pointer text-2xl font-bold text-white absolute top-[1.5rem] right-5 z-10"
             onClick={() => setShowAllUser(false)}
           >
-            <AiOutlineCloseCircle size={40} />
+            <AiOutlineClose/>
           </div>
         )}
 
@@ -74,17 +71,14 @@ const ChatContacts = () => {
         </div>
       </div>
 
-      {showAllUser && registeredUsers && (
+      {showAllUser && searchableUsers && (
         <div className="absolute bg-white text-black p-1 z-20 mt-7 w-full h-[65vh] overflow-y-auto scrollbar-hide">
-          {registeredUsers.map((user: any) => (
-            <ContactLabel
-              key={user.id}
-              user={user}
-              setUser={setResult}
-              setSearch={setSearch}
-              setShowAllUser={setShowAllUser}
-              add={true}
-            />
+          {searchableUsers.map((user: any) => (
+            <Link href={`/chat/${user.chatId}`}>
+              <a href="">
+                <ContactLabel key={user.id} user={user} />
+              </a>
+            </Link>
           ))}
         </div>
       )}

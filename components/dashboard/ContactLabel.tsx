@@ -1,32 +1,10 @@
 import Image from "next/image";
-import React, { useState } from "react";
-import * as EmailVaildator from "email-validator";
-import { useAppSelector } from "../../App/hooks";
-import { query, collection, where, addDoc } from "firebase/firestore";
-import { authentication, db } from "../../firebase";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { Auth } from "../../App/Services/UserService";
-import { IoMdAdd } from "react-icons/io";
-import { useRouter } from "next/router";
 
-
-const ContactLabel = ({
-  user,
-  setUser = null,
-  setSearch = null,
-  add = false,
-  setShowAllUser = false
-}: {
-  user: Auth;
-  setUser?: any;
-  setSearch?: any;
-  add?: boolean;
-  setShowAllUser?: any
-}) => {
+const ContactLabel = ({ user, }: { user: any; }) => {
 
   return (
     <>
-      <div className="bg-accent-content px-7 py-4 mb-3">
+      <div className="bg-accent-content px-7 py-4 mb-1">
         <div className=" flex justify-between">
           <div className=" flex">
             <Image
@@ -46,14 +24,6 @@ const ContactLabel = ({
               <p className="text-neutral-content">Ux designer</p>
             </div>
           </div>
-
-          {add && (
-            <button
-              className=" text-neutral font-bold"
-            >
-              <IoMdAdd size={30} />
-            </button>
-          )}
         </div>
       </div>
     </>

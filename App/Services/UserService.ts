@@ -21,6 +21,11 @@ export type UserType = {
 }
 
 class UserService {
+    public auth;
+
+    constructor(auth: any) {
+        this.auth = auth;
+    }
 
     // helper functions
 
@@ -37,8 +42,7 @@ class UserService {
         return userSnap;
     }
 
-    static all = async (minLimit = null) => {
-
+    public all = async (minLimit = null) => {
         const users: UserType[] = [];
         const userQuery = (minLimit ? query(collection(db, 'users'), limit(minLimit)) : query(collection(db, 'users'))) as Query<UserType>;
 
@@ -46,6 +50,10 @@ class UserService {
         querySnapshot.forEach((doc) => {
             users.push({ ...doc.data(), id: doc.id });
         });
+
+        if (users.length) {
+            return users.filter((user) => user.uid != this.auth.uid)
+        }
 
         return users;
     }
