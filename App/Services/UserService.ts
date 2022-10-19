@@ -1,5 +1,5 @@
 
-import { collection, query, where, getDocs, doc, getDoc, limit, Query } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, limit, Query, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export type Auth = {
@@ -26,7 +26,15 @@ class UserService {
 
     static find = async (id: string) => {
         const userRef = doc(db, 'users', id);
-        return await getDoc(userRef);
+        return (await getDoc(userRef)).data();
+    }
+
+    static isUserExist = async (id: string) => {
+        if (!id) return;
+        const userRef = (doc(db, "users", id));
+        const userSnap = (await getDoc(userRef)).exists()
+
+        return userSnap;
     }
 
     static all = async (minLimit = null) => {
@@ -49,10 +57,24 @@ class UserService {
         const querySnapshot = await getDocs(userQuery);
 
         querySnapshot.forEach((doc) => {
+            console.log(doc.data);
             users.push({ ...doc.data(), id: doc.id });
         });
 
         return users.length > 0 ? users[0] : null;
+    }
+
+    static saveUser = async (auth: any) => {
+        await setDoc(doc(db, "users", auth.uid), {
+            uid: auth.uid,
+            name: auth.displayName,
+            email: auth.email,
+            number: auth.phoneNumber,
+            photo_url: auth.photoURL,
+            created_at: auth.metadata.creationTime,
+            updated_at: auth.metadata.lastSignInTime,
+            last_seen: new Date().toLocaleString(),
+        });
     }
 
 }
