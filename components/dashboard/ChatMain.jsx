@@ -1,7 +1,5 @@
 import { BsFillFileEarmarkPostFill } from "react-icons/bs";
-import { RiContactsBook2Line } from "react-icons/ri";
-import { FaMicrophone } from "react-icons/fa";
-import { FiMoreHorizontal } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
 import React, { useState, useRef, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -57,6 +55,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
       messageSnapShort.forEach((doc) => {
         chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
       });
+      if (!chatMessages.length) return;
       return chatMessages.map((message) => (
         <Chats key={message.chat.id} message={message} />
       ));
@@ -125,7 +124,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
           className="bg-base-300 p-3 rounded-full"
           onClick={() => setShowDragAndDrop((e) => !e)}
         >
-          <BsFillFileEarmarkPostFill />
+          {showDragAndDrop ? (<AiOutlineClose />) : (<BsFillFileEarmarkPostFill />)}
         </label>
       </div>
     </section>

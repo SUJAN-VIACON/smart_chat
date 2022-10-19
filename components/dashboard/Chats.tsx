@@ -17,9 +17,9 @@ const Chats = ({ message = null }: { message: any }) => {
   return (
     <div>
       {message?.user == auth?.email ? (
-        <SenderChatLabel message={message} />
+        <SenderChatLabel chat={message?.chat} imageUrl={message?.imageUrl}/>
       ) : (
-        <ReceiverChatLabel message={message} />
+        <ReceiverChatLabel chat={message?.chat} imageUrl={message?.imageUrl} />
       )}
     </div>
   );

@@ -74,12 +74,13 @@ const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDr
       >
         <input {...getInputProps()} />
         <div className="">
-          {!files.length && <BsFileEarmarkArrowDown size={100} />}
+          { files[0].preview=='' && <BsFileEarmarkArrowDown size={100} />}
+          <p className="mt-3">Drag & Drop</p>
         </div>
       </div>
 
       <div>
-        {files.length && (
+        {files.length && files[0].preview!='' && (
           <div>
             {files.map((file) => (
               <div key={file.preview} className="flex flex-col justify-center gap-8">

@@ -3,14 +3,14 @@ import React from "react";
 import Image from "next/image";
 
 
-const ReceiverChatLabel = ({ message }: any) => {
+const ReceiverChatLabel = ({ chat, imageUrl }: { chat: any, imageUrl: any }) => {
   return (
     <div className=" w-full flex justify-end">
-      <label className="sender-chat-label bg-base-300 p-2 relative rounded-l-lg rounded-tr-lg">
-      {message.imageUrl && (
-          <Image src={message.imageUrl} width={100} height={100} />
+      <label className="sender-chat-label bg-base-300 p-2 relative rounded-l-lg rounded-tr-lg flex flex-col">
+      {imageUrl && (
+          <Image src={imageUrl} width={200} height={150} className="rounded" />
         )}
-        <span className="  ">{message}</span>
+        <span className="  ">{chat}</span>
       </label>
     </div>
   );
