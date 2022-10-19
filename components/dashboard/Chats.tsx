@@ -11,7 +11,7 @@ export type Auth = {
   name?: string | undefined;
 };
 
-const Chats = ({ message = null }: { message: null }) => {
+const Chats = ({ message = null }: { message: any }) => {
   const [auth, loading] = useAuthState(authentication);
 
   return (

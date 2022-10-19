@@ -17,9 +17,12 @@ import {
   query,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { type } from "os";
 
-const DragAndDrop = ({ chat ,setShowDragAndDrop}) => {
-  const [files, setFiles] = useState([]);
+const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDrop: any }) => {
+  const [files, setFiles] = useState([
+    { preview: '' }
+  ]);
   const [message, setMessage] = useState("");
   const [auth] = useAuthState(authentication);
 
@@ -79,7 +82,7 @@ const DragAndDrop = ({ chat ,setShowDragAndDrop}) => {
         {files.length && (
           <div>
             {files.map((file) => (
-              <div className="flex flex-col justify-center gap-8">
+              <div key={file.preview} className="flex flex-col justify-center gap-8">
                 <Image
                   src={file.preview}
                   width={300}

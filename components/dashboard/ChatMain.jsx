@@ -81,12 +81,6 @@ const ChatMain = ({ chat = null, messages = null }) => {
           <p className=" text-lg font-bold text-neutral">Akash Sharma</p>
           <p>applied as UX Designer</p>
         </div>
-        <div className="">
-          <div className="btn-group">
-            <button className="btn btn-active">Chat</button>
-            <button className="btn">Email</button>
-          </div>
-        </div>
       </div>
 
       <div className="h-full flex flex-col gap-1 overflow-y-auto px-10 mb-5 scrollbar-hide">
