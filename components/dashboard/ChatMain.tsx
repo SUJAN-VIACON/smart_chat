@@ -16,12 +16,15 @@ import {
 } from "firebase/firestore";
 import Spinner from "./Spinner";
 import DragAndDrop from "../DrangAndDrop/DragAndDrop";
+import UserService from "../../App/Services/UserService";
 
-const ChatMain = ({ chat = null, messages = null }) => {
+
+const ChatMain = ({ chat = null, messages = null }: { chat: any, messages: any }) => {
   const [showDragAndDrop, setShowDragAndDrop] = useState(false);
-  const [auth] = useAuthState(authentication);
+  const [auth] = useAuthState(authentication) as any;
+  const [user, setUser] = useState() as any;
   const [message, setMessage] = useState("");
-  const endOfMessageRef = useRef(null);
+  const endOfMessageRef = useRef(null) as any;
   const chatId = chat ? chat.id : null;
   const chatRef = chatId ? doc(db, "chats", chatId) : null;
   const messageRef = chatRef
@@ -30,7 +33,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
 
   const [messageSnapShort] = useCollection(messageRef);
 
-  const sendMessage = async (event) => {
+  const sendMessage = async (event:any) => {
     event.preventDefault();
     if (!message || message == "") return;
     const docRef = doc(db, "chats", chat.id);
@@ -45,22 +48,26 @@ const ChatMain = ({ chat = null, messages = null }) => {
   };
 
   useEffect(() => {
+    UserService.find(auth.uid).then((result: any) => {
+      setUser(result);
+    })
     scrollToBottom();
   }, [messageSnapShort, message]);
+
 
   const showMessage = () => {
     if (!chat && !messages) return null;
     if (messageSnapShort) {
-      const chatMessages = [];
+      const chatMessages: any = [];
       messageSnapShort.forEach((doc) => {
         chatMessages.push({ ...doc.data(), timeStamp: "hgh" });
       });
       if (!chatMessages.length) return;
-      return chatMessages.map((message) => (
+      return chatMessages.map((message: any) => (
         <Chats key={message.chat.id} message={message} />
       ));
     } else {
-      return messages.map((message) => (
+      return messages.map((message: any) => (
         <Chats key={message.chat.id} message={message} />
       ));
     }
@@ -77,8 +84,8 @@ const ChatMain = ({ chat = null, messages = null }) => {
     <section className="h-full relative flex flex-col justify-between gap-3">
       <div className="p-7 flex justify-between bg-accent-focus">
         <div className="">
-          <p className=" text-lg font-bold text-neutral">Akash Sharma</p>
-          <p>applied as UX Designer</p>
+          <p className=" text-lg font-bold text-neutral">{user?.name}</p>
+          <p>{user?.about != '' && user?.about ? user?.about : "no about"}</p>
         </div>
       </div>
 
@@ -121,7 +128,7 @@ const ChatMain = ({ chat = null, messages = null }) => {
 
         <label
           htmlFor=""
-          className="bg-base-300 p-3 rounded-full"
+          className="bg-accent-content shadow-lg border border-gray-400 p-3 rounded-full"
           onClick={() => setShowDragAndDrop((e) => !e)}
         >
           {showDragAndDrop ? (<AiOutlineClose />) : (<BsFillFileEarmarkPostFill />)}

@@ -10,7 +10,7 @@ import { authentication, db } from "../../firebase";
 import { AiOutlineClose, AiOutlineCloseCircle } from "react-icons/ai";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-const ChatContacts = () => {
+const ChatContacts = ({ chatId }: { chatId: any }) => {
   const [auth] = useAuthState(authentication) as any;
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState<string>();
@@ -39,6 +39,14 @@ const ChatContacts = () => {
     });
   };
 
+  const handleSearch = (text: any) => {
+    const results = users.filter((user: any) => {
+      return Object.values(user.email).join("").toLowerCase().includes(text.toLowerCase())
+        || Object.values(user.name).join("").toLowerCase().includes(text.toLowerCase())
+    });
+    setSearchableUsers(results);
+  }
+
   return (
     <section className="relative">
 
@@ -48,7 +56,7 @@ const ChatContacts = () => {
             className=" cursor-pointer text-2xl font-bold text-white absolute top-[1.5rem] right-5 z-10"
             onClick={() => setShowAllUser(false)}
           >
-            <AiOutlineClose/>
+            <AiOutlineClose />
           </div>
         )}
 
@@ -61,9 +69,9 @@ const ChatContacts = () => {
               type="text"
               placeholder="Search"
               className=" bg-accent-content  w-full h-full px-10 py-3"
-              value={search}
               onChange={(e) => {
-                setSearch(e.target.value);
+                handleSearch(e.target.value);
+                // setSearch(e.target.value);
               }}
             />
           </form>
@@ -76,7 +84,9 @@ const ChatContacts = () => {
           {searchableUsers.map((user: any) => (
             <Link href={`/chat/${user.chatId}`}>
               <a href="">
-                <ContactLabel key={user.id} user={user} />
+                <ContactLabel key={user.id} user={user} isActive={() => {
+                  return chatId == user.chatId;
+                }} />
               </a>
             </Link>
           ))}
@@ -89,7 +99,10 @@ const ChatContacts = () => {
             <div className="mt-3 mr-3" key={user.uid}>
               <Link href={`/chat/${user.chatId}`}>
                 <a href="">
-                  <ContactLabel key={user.id} user={user} />
+
+                  <ContactLabel key={user.id} user={user}
+                    isActive={chatId == user.chatId}
+                  />
                 </a>
               </Link>
             </div>

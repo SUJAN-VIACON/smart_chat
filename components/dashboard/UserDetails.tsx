@@ -1,31 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import UserService from "../../App/Services/UserService";
+import { authentication } from "../../firebase";
 import { MdOutlineMailOutline, MdFolderOpen } from "react-icons/md";
 import { IoIosCall } from "react-icons/io";
 import Image from 'next/image';
 
-const UserDetails = () => {
+const UserDetails = ({ chat }: { chat: any }) => {
+    const [auth] = useAuthState(authentication) as any;
+    const [user, setUser] = useState() as any;
+
+    useEffect(() => {
+        if (chat) {
+            const friendEmail = chat.user.filter((email: any) => email != auth.email)[0]
+            UserService.findByEmail(friendEmail).then((result: any) => setUser(result))
+        } else {
+            UserService.find(auth.uid).then((result: any) => {
+                setUser(result);
+            })
+        }
+    }, [chat])
+
     return (
         <div>
             <div className=" flex flex-col items-center justify-center ">
                 <Image
-                    src="/images/edu3.svg"
+                    src={
+                        user?.profileImage ??
+                        user?.photoURL ?? `https://avatars.dicebear.com/api/human/${user?.name}.svg`
+                    }
                     width={70} height={70}
                     alt=""
                     className=" w-20 rounded-full"
                 />
-                <h1 className="mt-2 text-2xl text-center text-neutral">Akash Sharma</h1>
-                <p className="mt-2 text-neutral-content">Ux designer</p>
+                <h1 className="mt-2 text-2xl text-center text-neutral">{user?.name}</h1>
+                <p className="mt-2 text-neutral-content">{user?.about != '' && user?.about ? user?.about : "no about"}</p>
             </div>
             <hr className="w-full my-5" />
 
             <div className="flex gap-4">
                 <MdOutlineMailOutline size={30} className="  font-light text-neutral-content" />{" "}
-                <span className="">Suajnmoi787@gmail.com</span>
+                <span className="">{user?.email}</span>
             </div>
 
             <div className="flex gap-4 mt-2">
                 <IoIosCall size={30} className="  font-light text-neutral-content" />{" "}
-                <span className="">Suajnmoi787@gmail.com</span>
+                <span className="">{user?.phone != '' && user?.phone ? user?.phone : "xx-xxxx-xxxx"}</span>
             </div>
 
             <hr className="w-full my-5" />

@@ -18,7 +18,7 @@ const FriendRequest = () => {
   return (
     <>
       <DashboardLayout>
-        <div className="grid grid-cols-4 w-full h-full p-5 justify-center">
+        <div className="grid grid-cols-4 w-full h-full py-12 px-5 justify-center">
           {users.map((user: any) => (
             <FriendCard key={user.id} user={user} />
           ))}

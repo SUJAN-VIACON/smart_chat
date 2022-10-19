@@ -39,7 +39,7 @@ export const SideNav = () => {
               !open && "scale-0"
             }`}
           >
-            Designer
+            Smart Chat
           </h1>
         </div>
 

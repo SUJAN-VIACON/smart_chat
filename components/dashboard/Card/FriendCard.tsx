@@ -62,7 +62,10 @@ const FriendCard = ({ user }: { user: any }) => {
       <div className="card w-72  shadow-xl p-5 bg-accent-content">
         <figure className="px-10 pt-2">
           <img
-            src={user.photo_url}
+            src={
+              user?.profileImage ??
+              user?.photo_url ?? `https://avatars.dicebear.com/api/human/${user.name}.svg`
+            }
             alt="Shoes"
             className="rounded-full w-[5rem] h-[5rem] border border-indigo-50"
           />
@@ -71,13 +74,13 @@ const FriendCard = ({ user }: { user: any }) => {
         <div className="mt-3 mb-5 items-center text-center">
           <div className="flex flex-col gap-3">
             <div className="flex flex-col items-center justify-center">
-              <h1 className="text-lg text-indigo-50">{user.name}</h1>
-              <p className="font-[400] text-[#6E6E6E]">{user?.about ?? "user has no about"}</p>
+              <h1 className="text-lg text-indigo-50">{user?.name}</h1>
+              <p className="font-[400] text-[#6E6E6E]">{user?.about != '' && user?.about ? user?.about : "no about"}</p>
             </div>
 
             <div>
               <p className="text-md">{user?.email}</p>
-              <p className="text-md">{user?.phone ?? "xx-xxxx-xxxx"}</p>
+              <p className="text-md">{user?.phone != '' && user?.phone ? user?.phone : "xx-xxxx-xxxx"}</p>
             </div>
           </div>
         </div>

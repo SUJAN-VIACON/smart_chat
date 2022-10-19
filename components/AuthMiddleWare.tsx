@@ -6,11 +6,12 @@ import { authentication, db } from '../firebase'
 import { SpinnerDiamond } from 'spinners-react'
 import { updateDoc, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
 import UserService from '../App/Services/UserService'
-
+import { useRouter } from 'next/router'
 
 const AuthMiddleWare = ({ children }: { children: any }) => {
     const dispatch = useAppDispatch();
     const [auth, loading] = useAuthState(authentication) as any;
+    const route = useRouter();
 
     useLayoutEffect(() => {
         auth && UserService.isUserExist(auth?.uid).then((isExist: any) => {
@@ -22,6 +23,8 @@ const AuthMiddleWare = ({ children }: { children: any }) => {
             updateDoc(doc(db, "users", auth.uid), {
                 last_seen: serverTimestamp()
             });
+        }else{
+            route.push("/");
         }
 
     }, [auth])

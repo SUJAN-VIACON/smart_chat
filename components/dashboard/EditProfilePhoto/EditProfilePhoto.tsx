@@ -47,7 +47,7 @@ const EditProfilePhoto = ({ user }: { user: any }) => {
                 updateUser(result);
             })
             .then((response) => {
-                // 
+                setFiles([])
             });
     };
 

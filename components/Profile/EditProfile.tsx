@@ -17,10 +17,11 @@ const profileSchema = yup.object().shape({
         .string()
         .email("please enter valid email")
         .required("email is required"),
+
 });
 
 
-const EditProfile = ({user}:{user:any}) => {
+const EditProfile = ({ user }: { user: any }) => {
 
     return (
         <div className="w-full h-full py-10">
@@ -28,7 +29,7 @@ const EditProfile = ({user}:{user:any}) => {
                 <Formik
                     initialValues={{
                         firstName: user.name.split(" ")[0], lastName: user?.name.split(" ")[1], email: user?.email,
-                        phone: user?.phone??'', about: user?.about??""
+                        phone: user?.phone ?? '', about: user?.about ?? ""
                     }}
                     validationSchema={profileSchema}
                     onSubmit={(values, { setSubmitting }) => {
@@ -59,7 +60,7 @@ const EditProfile = ({user}:{user:any}) => {
                             <div className='my-10 w-full h-[30vh]'>
                                 <div className='flex w-full h-full'>
                                     <div className='flex justify-center items-center border-r border-[#D9D9D9]'>
-                                            <EditProfilePhoto user={user}/>
+                                        <EditProfilePhoto user={user} />
                                     </div>
                                     <div className='flex-1'>
                                         <div className='px-20 w-full space-y-5'>

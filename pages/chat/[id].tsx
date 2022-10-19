@@ -33,9 +33,9 @@ const Chat = ({ chatId }: { chatId: any }) => {
     <div>
       <DashboardLayout>
         <ChatContainer
-          contacts={<ChatContacts />}
+          contacts={<ChatContacts chatId={chatId}/>}
           chatMain={<ChatMain key={chatId} chat={data?.chat} messages={data?.messages} />}
-          userDetails={<UserDetails />}
+          userDetails={<UserDetails chat={data?.chat}/>}
         />
       </DashboardLayout>
     </div>
