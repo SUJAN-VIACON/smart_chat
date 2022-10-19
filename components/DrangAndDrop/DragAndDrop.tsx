@@ -17,18 +17,15 @@ import {
   query,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { type } from "os";
 
 const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDrop: any }) => {
-  const [files, setFiles] = useState([
-    { preview: '' }
-  ]);
+  const [files, setFiles] = useState([]) as any;
   const [message, setMessage] = useState("");
   const [auth] = useAuthState(authentication);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => {
-      setFiles((e) => {
+      setFiles((e: any) => {
         const records = acceptedFiles.map((file: any) => {
           return Object.assign(file, {
             preview: URL.createObjectURL(file),
@@ -68,21 +65,22 @@ const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDr
 
   return (
     <div>
-      <div
-        {...getRootProps()}
-        className=" w-full h-full flex justify-center items-center"
-      >
-        <input {...getInputProps()} />
-        <div className="">
-          { files[0].preview=='' && <BsFileEarmarkArrowDown size={100} />}
-          <p className="mt-3">Drag & Drop</p>
+      {!files.length ?
+        (<div
+          {...getRootProps()}
+          className=" w-full h-full flex justify-center items-center"
+        >
+          <input {...getInputProps()} />
+          <div className="">
+            <BsFileEarmarkArrowDown size={100} />
+            <p className="mt-3">Drag & Drop</p>
+          </div>
         </div>
-      </div>
-
-      <div>
-        {files.length && files[0].preview!='' && (
+        )
+        :
+        (
           <div>
-            {files.map((file) => (
+            {files.map((file: any) => (
               <div key={file.preview} className="flex flex-col justify-center gap-8">
                 <Image
                   src={file.preview}
@@ -109,8 +107,8 @@ const DragAndDrop = ({ chat, setShowDragAndDrop }: { chat: any, setShowDragAndDr
             ))}
           </div>
         )}
-      </div>
     </div>
+
   );
 };
 
