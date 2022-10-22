@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
+import { TbMessageCircle } from "react-icons/tb";
 
 const Login = () => {
   const router = useRouter();
@@ -71,20 +72,13 @@ const Login = () => {
         
         <div className="card w-96 bg-base-100 shadow-xl">
           <figure className="px-10 pt-10">
-            <Image
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/yvbOx5two0W.png"
-              alt="Shoes"
-              className="rounded-xl"
-
-              height={100}
-              width={100}
-            />
+          <TbMessageCircle size={150}/>
           </figure>
           <div className="card-body items-center text-center">
-            <h2 className="card-title">Welcome to Sujan Messenger</h2>
+            <h2 className="card-title">Welcome to Smart Chat</h2>
             <p>For login your account click the below button</p>
             <div className="card-actions">
-              <button className="btn btn-primary" onClick={loginWithGoogle}>
+              <button className="btn btn-primary mt-5" onClick={loginWithGoogle}>
                 LOGIN
               </button>
             </div>

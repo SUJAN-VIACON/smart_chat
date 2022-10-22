@@ -32,7 +32,7 @@ const AuthMiddleWare = ({ children }: { children: any }) => {
 
 
     if (loading) {
-        return <div className='flex justify-center items-center h-screen w-full'><SpinnerDiamond size={200} color='green' /></div>
+        return <div className='flex justify-center items-center h-screen w-full'><SpinnerDiamond size={200} color='#017efa' /></div>
     }
 
     if (auth) {
