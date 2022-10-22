@@ -11,7 +11,7 @@ const ProfileButton = ({ user }: any) => {
                     <div className="w-10 rounded-full border border-indigo-50">
                         <img src={
                             user?.profileImage ??
-                            user?.photoURL ?? `https://avatars.dicebear.com/api/human/${user?.name}.svg`
+                            user?.photo_url ?? `https://avatars.dicebear.com/api/human/${user?.name}.svg`
                         } />
                     </div>
                 </label>

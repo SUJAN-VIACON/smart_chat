@@ -27,7 +27,7 @@ const UserDetails = ({ chat }: { chat: any }) => {
                 <Image
                     src={
                         user?.profileImage ??
-                        user?.photoURL ?? `https://avatars.dicebear.com/api/human/${user?.name}.svg`
+                        user?.photo_url ?? `https://avatars.dicebear.com/api/human/${user?.name}.svg`
                     }
                     width={70} height={70}
                     alt=""
