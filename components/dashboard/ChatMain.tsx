@@ -84,7 +84,7 @@ const ChatMain = ({ chat = null, messages = null }: { chat: any, messages: any }
     <section className="h-full relative flex flex-col justify-between gap-3">
       <div className="p-7 flex justify-between bg-accent-focus">
         <div className="">
-          <p className=" text-lg font-bold text-neutral">{user?.name}</p>
+          <p className=" text-lg font-bold text-neutral">{user?.name??"###"}</p>
           <p>{user?.about != '' && user?.about ? user?.about : "no about"}</p>
         </div>
       </div>
