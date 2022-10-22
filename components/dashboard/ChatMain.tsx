@@ -48,9 +48,9 @@ const ChatMain = ({ chat = null, messages = null }: { chat: any, messages: any }
   };
 
   useEffect(() => {
-    UserService.find(auth.uid).then((result: any) => {
-      setUser(result);
-    })
+     const userEmail = chat?.user ? chat.user.filter((userEmail:any)=> userEmail!=auth.email)[0]:"";
+     UserService.findByEmail(userEmail).
+     then((result:any)=> setUser(result))
     scrollToBottom();
   }, [messageSnapShort, message]);
 

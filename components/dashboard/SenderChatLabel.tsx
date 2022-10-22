@@ -7,7 +7,7 @@ type jsxType = {
 
 export const SenderChatLabel = ({ chat, imageUrl }: { chat: any, imageUrl: any }) => {
   return (
-    <div className=" flex justify-start">
+    <div className=" flex justify-end">
       <label className="sender-chat-label bg-base-300 p-2 rounded-r-lg rounded-bl-lg relative flex flex-col">
         {imageUrl && (
           <Image src={imageUrl} width={200} height={150} className="rounded" />
